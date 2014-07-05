@@ -3,31 +3,33 @@ require 'erb'
 module Buildserver
   class BuildingBlock
 
-    def compose(config, instance, instances)
+    def build!(config, instance, other_instances)
       reset!
+      @config = config
 
-      @config    = config
-      @instance  = instance
-      @instances = instances - [instance]
+      build(instance, other_instances)
 
-      add_header
-      build(instance, @instances)
-      add_footer
-
-      [@build_commands, @firewall_commands, @after_build_commands]
+      [@build_commands, @after_build_commands]
     end
 
     def exposes_services
       []
     end
 
+    def external_ports
+      []
+    end
+
+    def internal_ports
+      []
+    end
+
    private
 
     def reset!
+      @config               = []
       @build_commands       = []
       @after_build_commands = []
-      @instances            = []
-      @firewall_commands    = []
     end
 
     def run_command(command, direction = :now)
@@ -39,16 +41,11 @@ module Buildserver
       end
     end
 
-    def run_firewall_command(command)
-      @firewall_commands << "#{command}"
-    end
+    ## CONFIG
+    ###############################################
 
-    def add_header
-      @build_commands << "# ! #{self.class.name} -------------------------------------"
-    end
-
-    def add_footer
-      @build_commands << "# / #{self.class.name} -------------------------------------\n\n"
+    def config(option)
+      @config[option]
     end
 
     ## TEMPLATING
@@ -86,23 +83,6 @@ EOF")
       run_command("cat >> #{location} << EOF
 #{new_template}
 EOF")
-    end
-
-    ## FIREWALL
-    ###############################################
-
-    def open_internal_port(port)
-      @instance.internal_ports << port
-
-      @instances.each do |instance|
-        run_firewall_command("ufw allow from #{instance.ip_address} to any port #{port}")
-      end
-    end
-
-    def open_external_port(port)
-      @instance.external_ports << port
-
-      run_firewall_command("ufw allow #{port}")
     end
 
     ## USER

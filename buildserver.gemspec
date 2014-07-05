@@ -7,8 +7,8 @@ Gem::Specification.new do |spec|
   spec.version       = '0.0.1'
   spec.authors       = ["Kasper Grubbe"]
   spec.email         = ["kawsper@gmail.com"]
-  spec.summary       = %q{Write a short summary. Required.}
-  spec.description   = %q{Write a longer description. Optional.}
+  spec.summary       = %q{Lets you easily compile bash scripts from Ruby to build server instances on your favorite Linux distro.}
+  #spec.description   = %q{Write a longer description. Optional.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
