@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Kasper Grubbe"]
   spec.email         = ["kawsper@gmail.com"]
   spec.summary       = %q{Lets you easily compile bash scripts from Ruby to build server instances on your favorite Linux distro.}
-  #spec.description   = %q{Write a longer description. Optional.}
-  spec.homepage      = ""
+  spec.description   = %q{Build bash scripts from Ruby}
+  spec.homepage      = "https://github.com/Pidrock/buildserver"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
@@ -18,5 +18,5 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 1.6"
-  spec.add_development_dependency "rake"
+  spec.add_development_dependency "rake", "~> 10.3"
 end
