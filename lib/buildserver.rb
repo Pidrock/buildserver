@@ -13,8 +13,8 @@ module Buildserver
       @config = config
     end
 
-    def add_instance(hostname, ip_address, role)
-      @instances << Instance.new(hostname, ip_address, role)
+    def add_instance(hostname, role, ip_address, local_ip_address)
+      @instances << Instance.new(hostname, role, ip_address, local_ip_address)
     end
 
     def add_build_block(for_role, build_block)
