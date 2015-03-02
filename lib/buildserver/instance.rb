@@ -5,10 +5,10 @@ module Buildserver
   class Instance
     attr_reader :hostname, :ip_address, :role
 
-    def initialize(hostname, ip_address, role)
+    def initialize(hostname, role, ip_address)
       @hostname     = hostname
-      @ip_address   = ip_address
       @role         = role.to_s
+      @ip_address   = ip_address
       @build_blocks = []
     end
 
