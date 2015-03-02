@@ -3,14 +3,13 @@ require 'json'
 module Buildserver
 
   class Instance
-    attr_reader :hostname, :role, :ip_address, :local_ip_address
+    attr_reader :hostname, :ip_address, :role
 
-    def initialize(hostname, role, ip_address, local_ip_address)
-      @hostname         = hostname
-      @role             = role.to_s
-      @ip_address       = ip_address
-      @local_ip_address = local_ip_address
-      @build_blocks     = []
+    def initialize(hostname, ip_address, role)
+      @hostname     = hostname
+      @ip_address   = ip_address
+      @role         = role.to_s
+      @build_blocks = []
     end
 
     def add_build_block(block)
@@ -18,7 +17,7 @@ module Buildserver
     end
 
     def to_s
-      "#{@hostname}/#{@ip_address}/#{@local_ip_address} - #{@role}"
+      "#{@hostname}/#{@ip_address} - #{@role}"
     end
 
     def services
