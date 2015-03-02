@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = "buildserver"
-  spec.version       = '0.0.3'
+  spec.version       = '0.0.4'
   spec.authors       = ["Kasper Grubbe"]
   spec.email         = ["kawsper@gmail.com"]
   spec.summary       = %q{Lets you easily compile bash scripts from Ruby to build server instances on your favorite Linux distro.}
