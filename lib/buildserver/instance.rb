@@ -57,6 +57,10 @@ module Buildserver
 
       @commands << @after_commands
 
+      @commands << "if [ ! -f /root/system_setup_complete ]; then"
+      @commands << "echo $(date \"+%Y.%m.%d-%H:%M:%S\") > /root/system_setup_complete"
+      @commands << "fi"
+
       @commands.flatten
     end
 

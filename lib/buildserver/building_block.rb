@@ -85,6 +85,15 @@ EOF")
 EOF")
     end
 
+    ## SYSTEM SETUP
+    ###############################################
+
+    def if_first_system_setup?(direction = nil)
+      run_command("if [ ! -f /root/system_setup_complete ]; then", direction)
+      yield if block_given?
+      run_command("fi", direction)
+    end
+
     ## USER
     ###############################################
 
