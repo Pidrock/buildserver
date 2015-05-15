@@ -40,6 +40,10 @@ module Buildserver
       @commands       = []
       @after_commands = []
 
+      # Safe bash:
+      @commands << "set -eux"
+      @commands << "set -o pipefail"
+
       @build_blocks.each do |build_block|
         @commands << "# ! #{build_block.to_s} -------------------------------------"
 
