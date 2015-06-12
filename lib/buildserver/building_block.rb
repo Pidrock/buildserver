@@ -66,7 +66,7 @@ module Buildserver
       run_command("chown #{options.fetch(:owners)} #{location}")     if options.include?(:owners)
       run_command("chmod #{options.fetch(:permission)} #{location}") if options.include?(:permission)
 
-      run_command("cat > #{location} << EOF
+      run_command("cat > #{location} << \"EOF\"
 #{template}
 EOF")
     end
@@ -80,7 +80,7 @@ EOF")
       new_template << template
       new_template << "#---#{splitter.upcase}-END\n"
 
-      run_command("cat >> #{location} << EOF
+      run_command("cat >> #{location} << \"EOF\"
 #{new_template}
 EOF")
     end
