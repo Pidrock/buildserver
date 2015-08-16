@@ -2,26 +2,16 @@ require 'json'
 
 module Buildserver
 
-  class Instance
-    attr_reader :hostname, :ip_address, :role
+  class Role
+    attr_reader :role
 
-    def initialize(hostname, role, ip_address)
-      @hostname     = hostname
+    def initialize(role)
       @role         = role.to_s
-      @ip_address   = ip_address
       @build_blocks = []
     end
 
     def add_build_block(block)
       @build_blocks << block
-    end
-
-    def to_s
-      "#{@hostname}/#{@ip_address} - #{@role}"
-    end
-
-    def services
-      @build_blocks.map{|bb| bb.exposes_services}.flatten
     end
 
     def external_ports
@@ -36,7 +26,7 @@ module Buildserver
       @role == role.to_s
     end
 
-    def build(config, instances)
+    def build(roles)
       @commands       = []
       @after_commands = []
 
@@ -47,7 +37,7 @@ module Buildserver
       @build_blocks.each do |build_block|
         @commands << "# ! #{build_block.to_s} -------------------------------------"
 
-        commands, after_commands = build_block.build!(config, self, instances)
+        commands, after_commands = build_block.build!(self, roles)
 
         @commands << commands
         @commands << "# / #{build_block.to_s} -------------------------------------"
