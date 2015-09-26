@@ -1,31 +1,31 @@
 require 'fileutils'
 
-require_relative 'buildserver/instance'
+require_relative 'buildserver/role'
 require_relative 'buildserver/building_block'
 require_relative 'buildserver/erb_template'
 
 module Buildserver
 
   class Buildserver
-    def initialize(config = {})
-      @instances = []
-
-      @config = config
+    def initialize
+      @roles = []
     end
 
-    def add_instance(hostname, role, ip_address)
-      @instances << Instance.new(hostname, role, ip_address)
+    def add_role(role)
+      @roles << Role.new(role)
     end
 
     def add_build_block(for_role, build_block)
-      if for_role == :base
-        instances = @instances
+      raise ArgumentError.new("Unknown role: #{for_role}") unless (['base'] + @roles.map(&:role)).include?(for_role)
+
+      if for_role == 'base'
+        roles = @roles
       else
-        instances = @instances.select{|instance| instance.has_role?(for_role.to_s)}
+        roles = @roles.select{|role| role.has_role?(for_role)}
       end
 
-      instances.each do |instance|
-        instance.add_build_block(build_block)
+      roles.each do |role|
+        role.add_build_block(build_block)
       end
     end
 
@@ -33,11 +33,11 @@ module Buildserver
       FileUtils.mkdir_p("builds")
       FileUtils.rm( Dir.glob("builds/*") )
 
-      @instances.each do |instance|
-        puts "Writing to builds/#{instance.hostname}.sh..."
-        commands = instance.build(@config, @instances - [instance])
+      @roles.each do |role|
+        puts "Writing to builds/#{role.role}.sh..."
+        commands = role.build(@roles - [role])
 
-        file = File.new("builds/#{instance.hostname}.sh", "w")
+        file = File.new("builds/#{role.role}.sh", "w")
         commands.each do |command|
           file.puts(command)
         end

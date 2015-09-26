@@ -3,17 +3,11 @@ require 'erb'
 module Buildserver
   class BuildingBlock
 
-    def build!(config, instance, other_instances)
+    def build!(instance, other_instances)
       reset!
-      @config = config
-
       build(instance, other_instances)
 
       [@build_commands, @after_build_commands]
-    end
-
-    def exposes_services
-      []
     end
 
     def external_ports
@@ -27,7 +21,6 @@ module Buildserver
    private
 
     def reset!
-      @config               = []
       @build_commands       = []
       @after_build_commands = []
     end
@@ -39,13 +32,6 @@ module Buildserver
       else
         @build_commands       << "    #{command}"
       end
-    end
-
-    ## CONFIG
-    ###############################################
-
-    def config(option)
-      @config[option]
     end
 
     ## TEMPLATING
@@ -142,7 +128,7 @@ EOF")
     ## TEXT EDITING
     ###############################################
 
-    def find_and_replace(before, after, filepath)
+    def find_and_replace(filepath, before, after)
       run_command("OLD=\"#{before}\"")
       run_command("NEW=\"#{after}\"")
       run_command("sed -i \"s/\${OLD}/\${NEW}/g\" #{filepath}")

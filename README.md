@@ -28,9 +28,9 @@ require 'buildserver'
 require_relative 'blocks/base/builder'
 
 buildserver = Buildserver::Buildserver.new
-buildserver.add_instance('wilmut.example.com', '80.0.0.10', :jumphost)
+buildserver.add_role('jumpserver')
 
-buildserver.add_build_block(:base, Blocks::Base::Builder.new)
+buildserver.add_build_block('base', Blocks::Base::Builder.new)
 
 buildserver.build!
 EOF
@@ -50,11 +50,6 @@ module Blocks
         run_command("apt-get -y install aptitude")
         run_command("aptitude -y full-upgrade")
 
-        # Set hostname
-        run_command("echo \"#{instance.hostname}\" > /etc/hostname")
-        run_command("echo -e \"\\n127.0.0.1 #{instance.hostname} #{instance.hostname}.local\\n\" >> /etc/hosts")
-        run_command("hostname -F /etc/hostname")
-
         # Set ssh to only allow keys
         run_command("sed -i \"/#PasswordAuthentication yes/PasswordAuthentication no/g\" /etc/ssh/sshd_config")
         run_command("service ssh restart", :after)
@@ -71,12 +66,12 @@ end
 EOF
 ```
 
-### Adding servers with roles:
+### Adding roles:
 
 ```ruby
-buildserver.add_instance('m1.example.com', '80.0.0.1', :loadbalancer)
-buildserver.add_instance('m2.example.com', '80.0.0.2', :utility)
-buildserver.add_instance('m3.example.com', '80.0.0.3', :application)
+buildserver.add_role('loadbalancer')
+buildserver.add_role('utility')
+buildserver.add_role('application')
 ```
 
 ### Built-in Builder methods:
