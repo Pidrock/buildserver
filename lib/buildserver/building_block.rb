@@ -128,7 +128,7 @@ EOF")
     ## TEXT EDITING
     ###############################################
 
-    def find_and_replace(before, after, filepath)
+    def find_and_replace(filepath, before, after)
       run_command("OLD=\"#{before}\"")
       run_command("NEW=\"#{after}\"")
       run_command("sed -i \"s/\${OLD}/\${NEW}/g\" #{filepath}")
