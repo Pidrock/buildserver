@@ -132,6 +132,8 @@ EOF")
       run_command("OLD=\"#{before}\"")
       run_command("NEW=\"#{after}\"")
       run_command("sed -i \"s/\${OLD}/\${NEW}/g\" #{filepath}")
+      run_command("unset OLD")
+      run_command("unset NEW")
     end
 
   end
